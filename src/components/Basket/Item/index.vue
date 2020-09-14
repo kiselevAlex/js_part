@@ -18,11 +18,6 @@
 </template>
 
 <script>
-/**
- * Не стал использовать либу для input-number
- *
- * если начать вводить не число, то в инпут подставится текущее значение count
- */
 import Price from "../../ui/Price";
 import Row from "../Row";
 export default {
@@ -44,11 +39,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      error: false
-    };
-  },
   methods: {
     deleteFromBasket() {
       this.onBasket({ id: this.goods.id, count: 0 });
@@ -60,12 +50,16 @@ export default {
 
       if (/[^\d]/.test(value)) {
         e.preventDefault();
-        this.$refs.count.value = this.count;
+        this.$refs.count.value =
+          this.lastValid !== undefined ? this.lastValid : this.count;
+      } else {
+        this.lastValid = value;
       }
     },
     onChange({ target: { value } }) {
       this.onBasket({ id: this.goods.id, count: +value });
       this.$refs.count.value = this.count;
+      this.lastValid = this.count;
     }
   }
 };
