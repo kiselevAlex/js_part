@@ -1,3 +1,7 @@
+/**
+ * Использовал стор так как тестовое задание, хотя тут он был не нужен
+ */
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import omit from 'lodash/omit'
@@ -33,6 +37,9 @@ export default new Vuex.Store({
       state.namesMap = namesMap;
     }
   },
+  /**
+   * Экшены не делаю запросы к апи напрямую, они опщаются с сервисным слоем/сервисом
+   */
   actions: {
     init({ dispatch }) {
       return Promise.all([dispatch('loadGoods'), dispatch('loadNames')])
@@ -52,6 +59,9 @@ export default new Vuex.Store({
       commit('setRate', round(random(20, 80)))
     }
   },
+  /**
+   * Формирую мапу категориев и товаров
+   */
   getters: {
     categoriesMap: ({ goods, namesMap }) =>
       goods.reduce(

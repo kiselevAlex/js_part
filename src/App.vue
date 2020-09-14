@@ -7,6 +7,12 @@
 </template>
 
 <script>
+/**
+ * Корневой компонет приложения, так как страница одна, то аналогичен компоненту страницы
+ *
+ * в противном случае тут был бы роут
+ */
+
 import { mapActions, mapGetters, mapState } from "vuex";
 import Catalog from "./components/Catalog";
 import Basket from "./components/Basket";
@@ -39,6 +45,7 @@ export default {
       await Promise.all([this.loadGoods(), this.loadNames(), this.loadRate()]);
       this.interval();
     },
+    // не race condition =)
     interval() {
       this.timout = setTimeout(async () => {
         try {

@@ -3,6 +3,10 @@
 </template>
 
 <script>
+/**
+ * Компонент для подсветки цены, запоминает старую цену с помощью watch
+ */
+
 export default {
   props: {
     price: {
