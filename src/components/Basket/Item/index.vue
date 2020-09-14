@@ -18,6 +18,11 @@
 </template>
 
 <script>
+/**
+ * Не стал использовать либу для input-number
+ *
+ * если начать вводить не число, то в инпут подставится текущее значение count
+ */
 import Price from "../../ui/Price";
 import Row from "../Row";
 export default {
@@ -59,8 +64,8 @@ export default {
       }
     },
     onChange({ target: { value } }) {
-      this.$refs.count.value = +value;
       this.onBasket({ id: this.goods.id, count: +value });
+      this.$refs.count.value = this.count;
     }
   }
 };
