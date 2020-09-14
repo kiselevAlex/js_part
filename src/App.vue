@@ -1,28 +1,72 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div v-if="loading">Загрузка...</div>
+    <Catalog v-else :categoriesMap="categoriesMap" :goodsMap="goodsMap" :onBasket="updateBasket" />
+    <Basket :items="basket" :goodsMap="goodsMap" :onBasket="updateBasket" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapActions, mapGetters, mapState } from "vuex";
+import Catalog from "./components/Catalog";
+import Basket from "./components/Basket";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    Catalog,
+    Basket
+  },
+  data() {
+    return {
+      loading: false
+    };
+  },
+  async created() {
+    try {
+      this.loading = true;
+      await this.init();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.loading = false;
+    }
+  },
+  beforeDestroy() {
+    if (this.timout) clearTimeout(this.timout);
+  },
+  methods: {
+    async init() {
+      await Promise.all([this.loadGoods(), this.loadNames(), this.loadRate()]);
+      this.interval();
+    },
+    interval() {
+      this.timout = setTimeout(async () => {
+        try {
+          await Promise.all([this.loadGoods(), this.loadRate()]);
+        } catch (e) {
+          console.error(e);
+        } finally {
+          this.interval();
+        }
+      }, 15000);
+    },
+    ...mapActions({
+      loadGoods: "loadGoods",
+      loadNames: "loadNames",
+      loadRate: "loadRate",
+      updateBasket: "updateBasket"
+    })
+  },
+  computed: {
+    ...mapGetters(["categoriesMap", "goodsMap"]),
+    ...mapState(["basket"])
   }
-}
+};
 </script>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-size: 14px;
 }
 </style>

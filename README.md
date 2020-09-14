@@ -20,5 +20,7 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Run local prod server after build
+```
+yarn prod
+```
